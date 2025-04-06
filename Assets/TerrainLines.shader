@@ -6,7 +6,7 @@ Shader "Unlit/TerrainLines"
     }
     SubShader
     {
-        Tags { "RenderType"="Transparent" }
+        Tags { "RenderType"="Opaque" }
         LOD 100
 
         Pass
@@ -55,8 +55,7 @@ Shader "Unlit/TerrainLines"
 
             float sample_remap_round(sampler2D tex, float2 uv, float r)
             {
-            	float col = tex2D(tex, uv).a;
-	            col = Remap(col, float2(0.43f, 0.68f), float2(0.0f, 1.0f));
+            	float col = sample_remap(tex, uv);
             	return round(col * r) / r;
             }
             
@@ -121,11 +120,11 @@ Shader "Unlit/TerrainLines"
             fixed4 frag (v2f i) : SV_Target
             {
                 float col = sample_remap(_MainTex, i.uv);
-            	float wide_line =  sobel_round(_MainTex, i.uv, 0.0005f, 10);
+            	float wide_line =  sobel_round(_MainTex, i.uv, 0.0005f, 5) * col;
 
                 // col = Remap(col, float2(0.43f, 0.68f), float2(0.0f, 1.0f));
 
-            	col = step(0.01f, sobel(_MainTex, i.uv, 0.00022f)) * col; 
+            	col = step(0.01f, sobel(_MainTex, i.uv, 0.00022f)) * col * 0.6f; 
                 
                 return col + wide_line;
             }
