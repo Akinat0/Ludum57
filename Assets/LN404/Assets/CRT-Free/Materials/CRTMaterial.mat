@@ -63,14 +63,14 @@ Material:
     m_Ints: []
     m_Floats:
     - _BorderInnerDarkerAmount: 1
-    - _BorderInnerSharpness: 0.996
+    - _BorderInnerSharpness: 0
     - _BorderInnerSizeX: 0
     - _BorderInnerSizeY: 0
     - _BorderOutterRound: 0.2
     - _BorderOutterSharpness: 1
     - _BorderOutterSizeX: 0
     - _BorderOutterSizeY: 0
-    - _BorderZoom: 1.1
+    - _BorderZoom: 1.2
     - _BottomStaticOpt: 0
     - _BumpScale: 1
     - _CrtGlowAmount: 0
@@ -78,18 +78,18 @@ Material:
     - _CrtReflectionFalloff: 0.24
     - _CrtReflectionRadius: -0.087
     - _Curvature: 20
-    - _Curvature2: 0.05
+    - _Curvature2: 0
     - _Cutoff: 0.5
-    - _Desaturation: 0.561
+    - _Desaturation: 0.723
     - _DetailNormalMapScale: 1
-    - _DitherScreenScale: 1
+    - _DitherScreenScale: 1.65
     - _DstBlend: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _HorzFuzzOpt: 0.1
-    - _MaxColorsBlue: 210
-    - _MaxColorsGreen: 210
+    - _MaxColorsBlue: 193
+    - _MaxColorsGreen: 206
     - _MaxColorsRed: 210
     - _Metallic: 0
     - _Mode: 0
@@ -99,17 +99,17 @@ Material:
     - _ScanlinesOpt: 0.4
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _Spread: 0.06
-    - _Spread8: 0.12
+    - _Spread: 0.086
+    - _Spread8: 0.14
     - _SrcBlend: 1
     - _UVSec: 0
     - _VertJerkOpt: 1
     - _VertMovementOpt: 1
-    - _VigSize: 0.4
+    - _VigSize: 0.026
     - _ZWrite: 1
     m_Colors:
     - _BorderTint: {r: 0, g: 0, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _ColorScans: {r: 0.375, g: 0.375, b: 1.5, a: 0}
+    - _ColorScans: {r: 0.35, g: 0.35, b: 4.77, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
