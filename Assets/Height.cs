@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -10,9 +11,14 @@ public class Height : MonoBehaviour
 
     void Start()
     {
+        point.DOPunchScale(new Vector3(.1f,.1f,.1f), 0.2f);
+    }
+
+    void LateUpdate()
+    {
         GetComponentInChildren<TextMeshPro>().text = Mathf.RoundToInt(GameScene.Instance.GetTerrainHeightAtLocation(transform.position) * 1000) + "m";
 
-        point.DOPunchScale(new Vector3(.1f,.1f,.1f), 0.2f);
+        
     }
 
 }

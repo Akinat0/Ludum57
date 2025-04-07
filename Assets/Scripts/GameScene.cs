@@ -92,7 +92,16 @@ public class GameScene : MonoBehaviour
         int hours = Mathf.RoundToInt(totalMinutes) / 60 + 6;
         int minutes = Mathf.RoundToInt(totalMinutes) % 60;
 
+        totalTimeText.color = hours > 22 ? Color.red : new Color(0.6196079f, 0.6039216f,0.6039216f );
+            
+        
+        if (hours >= 24)
+        {
+            Failed();
+        }
+        
         totalTimeText.text = string.Format("{0:D2}:{1:D2}", hours, minutes);
+        
     }
 
     IEnumerator Start()
@@ -158,31 +167,42 @@ public class GameScene : MonoBehaviour
                     
                     
                     bool pointDeleted = false;
-                    
-                    //    ADD/REMOVE TARGET POINT
-                    foreach (var targetPoint in targetPoints)
+
+
+                    if (Vector2.Distance(clickPoint,new Vector2(playerPoint.transform.position.x, playerPoint.transform.position.y)) < playerPoint.localScale.x * 1.1f)
                     {
-                        if (Vector2.Distance(clickPoint, new Vector2(targetPoint.transform.position.x, targetPoint.transform.position.y)) < targetPoint.localScale.x)
+                        //ignore click on player
+                        pointDeleted = true;
+                    }
+                    else
+                    {
+                        //    ADD/REMOVE TARGET POINT
+                        foreach (var targetPoint in targetPoints)
                         {
-                            if (!connectedTargetPoint && pointsRemains > 0)
+                            if (Vector2.Distance(clickPoint,
+                                    new Vector2(targetPoint.transform.position.x, targetPoint.transform.position.y)) <
+                                targetPoint.localScale.x)
                             {
-                                points.Add(targetPoint);
-                                connectedTargetPoint = targetPoint;
-                                Instantiate(flarePrefab, targetPoint.transform.position, Quaternion.identity);
-                                pointsRemains--;
-                                currentPoints++;
+                                if (!connectedTargetPoint && pointsRemains > 0)
+                                {
+                                    points.Add(targetPoint);
+                                    connectedTargetPoint = targetPoint;
+                                    Instantiate(flarePrefab, targetPoint.transform.position, Quaternion.identity);
+                                    pointsRemains--;
+                                    currentPoints++;
+                                }
+                                else if (targetPoint == connectedTargetPoint)
+                                {
+                                    points.Remove(targetPoint);
+                                    connectedTargetPoint = null;
+                                    Instantiate(flarePrefab, targetPoint.transform.position, Quaternion.identity);
+                                    pointsRemains++;
+                                    currentPoints--;
+                                }
+
+                                pointDeleted = true;
+                                break;
                             }
-                            else if (targetPoint == connectedTargetPoint)
-                            {
-                                points.Remove(targetPoint);
-                                connectedTargetPoint = null;
-                                Instantiate(flarePrefab, targetPoint.transform.position, Quaternion.identity);
-                                pointsRemains++;
-                                currentPoints--;
-                            }
-                            
-                            pointDeleted = true;
-                            break;
                         }
                     }
 
@@ -312,10 +332,14 @@ public class GameScene : MonoBehaviour
             {
                 points[i].GetComponent<SpriteRenderer>().sprite = targetPointDisabledSprite;
                 points[i].localScale = Vector3.one * 0.2f;
+                
             }
             else
             {
                 points[i].localScale *= 0.45f;
+                var h = points[i].GetComponentInChildren<Height>();
+                if(h)
+                    h.gameObject.SetActive(false);
             }
         }
         
