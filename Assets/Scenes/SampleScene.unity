@@ -182,6 +182,7 @@ GameObject:
   m_Component:
   - component: {fileID: 17225736}
   - component: {fileID: 17225737}
+  - component: {fileID: 17225738}
   m_Layer: 0
   m_Name: Target (2)
   m_TagString: Untagged
@@ -257,6 +258,23 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &17225738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 17225735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 411060de4483b5e4c9847cd3cbc18554, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetColor: {r: 0.61960787, g: 0.6039216, b: 0.6039216, a: 1}
+  needBoxIndicator: 1
+  needArrowIndicator: 1
+  needDistanceText: 1
+  indicator: {fileID: 0}
 --- !u!4 &80361448 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 288926914957491122, guid: 8bfa1209662c7fd4a9275ab948a6217d, type: 3}
@@ -377,6 +395,7 @@ GameObject:
   m_Component:
   - component: {fileID: 530929299}
   - component: {fileID: 530929300}
+  - component: {fileID: 530929301}
   m_Layer: 0
   m_Name: Target (1)
   m_TagString: Untagged
@@ -452,6 +471,23 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &530929301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 530929298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 411060de4483b5e4c9847cd3cbc18554, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetColor: {r: 0.61960787, g: 0.6039216, b: 0.6039216, a: 1}
+  needBoxIndicator: 1
+  needArrowIndicator: 1
+  needDistanceText: 1
+  indicator: {fileID: 0}
 --- !u!1001 &656710664
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1309,6 +1345,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1407173558}
   - component: {fileID: 1407173559}
+  - component: {fileID: 1407173560}
   m_Layer: 0
   m_Name: Target
   m_TagString: Untagged
@@ -1384,6 +1421,23 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1407173560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1407173557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 411060de4483b5e4c9847cd3cbc18554, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetColor: {r: 0.61960787, g: 0.6039216, b: 0.6039216, a: 1}
+  needBoxIndicator: 1
+  needArrowIndicator: 1
+  needDistanceText: 1
+  indicator: {fileID: 0}
 --- !u!1 &1550926750
 GameObject:
   m_ObjectHideFlags: 0
