@@ -13,7 +13,7 @@ public class GameScene : MonoBehaviour
     [SerializeField] SpriteRenderer terrain;
     [SerializeField] Texture2D terrainTexture;
     [SerializeField] Transform playerPoint;
-    [SerializeField] Transform targetPoint;
+    [SerializeField] List<Transform> targetPoints;
     [SerializeField] RectTransform heightPivot;
     [SerializeField] TextMeshProUGUI heightText;
     [SerializeField] float height = 1000;
@@ -28,7 +28,8 @@ public class GameScene : MonoBehaviour
 
     List<Transform> points = new List<Transform>();
     
-    bool endPointConnected = false;
+    bool endPointConnected => connectedTargetPoint;
+    Transform connectedTargetPoint;
 
     public static Rect GetSpriteRectInWorld(SpriteRenderer spriteRenderer)
     {
@@ -76,7 +77,7 @@ public class GameScene : MonoBehaviour
 
             if (Input.GetKey(KeyCode.Space))
             {
-                float speed = 1;
+                /*float speed = 1;
 
                 Vector3 newPos = playerPoint.transform.position + speed * Time.deltaTime * (targetPoint.position - playerPoint.position).normalized;
 
@@ -92,7 +93,7 @@ public class GameScene : MonoBehaviour
                 }
                 
                 newPos = playerPoint.transform.position + speed * Time.deltaTime * (targetPoint.position - playerPoint.position).normalized;
-                playerPoint.transform.position = newPos;
+                playerPoint.transform.position = newPos;*/
             }
 
             if (EventSystem.current.IsPointerOverGameObject())
@@ -113,19 +114,31 @@ public class GameScene : MonoBehaviour
                     
                     bool pointDeleted = false;
 
-                    //    ADD/REMOVE TARGET POINT        
-                    if (Vector2.Distance(clickPoint, new Vector2(targetPoint.transform.position.x, targetPoint.transform.position.y)) < targetPoint.localScale.x)
+                    //    ADD/REMOVE TARGET POINT
+                    foreach (var targetPoint in targetPoints)
                     {
-                        if (endPointConnected)
-                            points.Remove(targetPoint);
-                        else
-                            points.Add(targetPoint);
-                        
-                        endPointConnected = !endPointConnected;
-                        pointDeleted = true;
+                        if (Vector2.Distance(clickPoint, new Vector2(targetPoint.transform.position.x, targetPoint.transform.position.y)) < targetPoint.localScale.x)
+                        {
+                            if (!connectedTargetPoint)
+                            {
+                                points.Add(targetPoint);
+                                connectedTargetPoint = targetPoint;
+                                Instantiate(flarePrefab, targetPoint.transform.position, Quaternion.identity);
+                            }
+                            else if (targetPoint == connectedTargetPoint)
+                            {
+                                points.Remove(targetPoint);
+                                connectedTargetPoint = null;
+                                Instantiate(flarePrefab, targetPoint.transform.position, Quaternion.identity);
+                            }
+                            
+                            pointDeleted = true;
+                            break;
+                        }
                     }
+
                     //    REMOVE WAYPOINT
-                    else 
+                    if(!pointDeleted)
                     {
                         for (int i = 1 /* don't touch player*/ ; i < points.Count; i++)
                         {
