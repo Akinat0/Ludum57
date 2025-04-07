@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 
 public class GameScene : MonoBehaviour
@@ -25,8 +26,14 @@ public class GameScene : MonoBehaviour
     [SerializeField] Flare flarePrefab;
     [SerializeField] TextMeshProUGUI predictedTimeText;
     [SerializeField] TextMeshProUGUI predictedDistText;
+    [SerializeField] TextMeshProUGUI predictedElevationText;
+    [SerializeField] TextMeshProUGUI pointRemainsText;
+    [SerializeField] TextMeshProUGUI pointCurrText;
     [SerializeField] float playerMoveSpeed = 10;
     [SerializeField] Sprite targetPointDisabledSprite;
+
+    public int pointsRemains = 10;
+    public int currentPoints = 0;
 
     List<Transform> points = new List<Transform>();
     Polyline line;
@@ -104,23 +111,27 @@ public class GameScene : MonoBehaviour
                     
                     
                     bool pointDeleted = false;
-
+                    
                     //    ADD/REMOVE TARGET POINT
                     foreach (var targetPoint in targetPoints)
                     {
                         if (Vector2.Distance(clickPoint, new Vector2(targetPoint.transform.position.x, targetPoint.transform.position.y)) < targetPoint.localScale.x)
                         {
-                            if (!connectedTargetPoint)
+                            if (!connectedTargetPoint && pointsRemains > 0)
                             {
                                 points.Add(targetPoint);
                                 connectedTargetPoint = targetPoint;
                                 Instantiate(flarePrefab, targetPoint.transform.position, Quaternion.identity);
+                                pointsRemains--;
+                                currentPoints++;
                             }
                             else if (targetPoint == connectedTargetPoint)
                             {
                                 points.Remove(targetPoint);
                                 connectedTargetPoint = null;
                                 Instantiate(flarePrefab, targetPoint.transform.position, Quaternion.identity);
+                                pointsRemains++;
+                                currentPoints--;
                             }
                             
                             pointDeleted = true;
@@ -131,7 +142,7 @@ public class GameScene : MonoBehaviour
                     //    REMOVE WAYPOINT
                     if(!pointDeleted)
                     {
-                        for (int i = 1 /* don't touch player*/ ; i < points.Count; i++)
+                        for (int i = 1 /* don't touch player */ ; i < points.Count; i++)
                         {
                             Transform p = points[i];
                             
@@ -142,6 +153,8 @@ public class GameScene : MonoBehaviour
                                 Instantiate(flarePrefab, p.transform.position, Quaternion.identity);
                                 Destroy(p.gameObject);
                                 points.RemoveAt(i);
+                                pointsRemains++;
+                                currentPoints--;
                                 pointDeleted = true;
 
                                 break;
@@ -150,17 +163,21 @@ public class GameScene : MonoBehaviour
                     }
 
                     //    ADD WAYPOINT
-                    if (!pointDeleted && !endPointConnected)
+                    if (!pointDeleted && !endPointConnected && pointsRemains > 0)
                     {
                         Vector3 pos = mouseWorldPoint;
                         pos.z = terrain.transform.position.z - 1;
                         var point = Instantiate(pointPrefab, pos, Quaternion.identity);
                         Instantiate(flarePrefab, pos, Quaternion.identity);
                         point.parent = terrain.transform;
+                        pointsRemains--;
+                        currentPoints++;
                     
                         points.Add(point);
                     }
-                    
+
+                    pointRemainsText.text = pointsRemains.ToString();
+                    pointCurrText.text = currentPoints.ToString();
                     
                     RefreshLine();
                 }
@@ -185,9 +202,10 @@ public class GameScene : MonoBehaviour
             }
         }
         
-        //add point here
+        //TODO add point success here
         if(connectedTargetPoint)
             connectedTargetPoint = null;
+        
         
         StartPath();
     }
@@ -195,9 +213,15 @@ public class GameScene : MonoBehaviour
 
     void StartPath()
     {
+        if (pointsRemains == 0)
+            Failed();
+        
+        currentPoints = 0;
+        pointCurrText.text = currentPoints.ToString();
+        
         if (line)
         {
-            line.thickness *= 0.35f;
+            line.thickness *= 0.5f;
             line.Rebuild();
             line.SetDisabledMat();
         }
@@ -211,7 +235,7 @@ public class GameScene : MonoBehaviour
             }
             else
             {
-                points[i].localScale *= 0.35f;
+                points[i].localScale *= 0.45f;
             }
         }
         
@@ -255,6 +279,7 @@ public class GameScene : MonoBehaviour
 
 
         float timeToPass = 0;
+        float totalPredictedHeight = 0;
         for (int i = 0; i < distances.Count; i++)
         {
             float heightDiff = 0;
@@ -279,11 +304,13 @@ public class GameScene : MonoBehaviour
             
             float time = d / speed;
             timeToPass += time;
+            totalPredictedHeight += Mathf.Abs(heightDiff * 1000);
         }
 
         
         predictedTimeText.text = Mathf.Round(timeToPass) + " min" ;
         predictedDistText.text = Mathf.Round(dist) + " km";
+        predictedElevationText.text = Mathf.Round(totalPredictedHeight) + "m";
         
 
 
@@ -298,10 +325,15 @@ public class GameScene : MonoBehaviour
     {
         Instance = null;
     }
-
-    void OnApplicationQuit()
+    
+    void Failed()
     {
-        
+        Restart();
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     
 }
