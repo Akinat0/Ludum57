@@ -22,6 +22,7 @@ public class GameScene : MonoBehaviour
     [SerializeField] float stepScale = 5;
     [SerializeField] Gradient gradient;
     [SerializeField] float heightToSpeed = 10; //meters per second?
+    [SerializeField] Flare flarePrefab;
 
     List<Transform> points = new List<Transform>();
     
@@ -132,6 +133,7 @@ public class GameScene : MonoBehaviour
                             if (Vector2.Distance(clickPoint,
                                     new Vector2(p.transform.position.x, p.transform.position.y)) < p.localScale.x)
                             {
+                                Instantiate(flarePrefab, p.transform.position, Quaternion.identity);
                                 Destroy(p.gameObject);
                                 points.RemoveAt(i);
                                 pointDeleted = true;
@@ -147,6 +149,7 @@ public class GameScene : MonoBehaviour
                         Vector3 pos = mouseWorldPoint;
                         pos.z = terrain.transform.position.z - 1;
                         var point = Instantiate(pointPrefab, pos, Quaternion.identity);
+                        Instantiate(flarePrefab, pos, Quaternion.identity);
                         point.parent = terrain.transform;
                     
                         points.Add(point);
