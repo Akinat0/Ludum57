@@ -21,6 +21,7 @@ public class GameScene : MonoBehaviour
     [SerializeField] Polyline line;
     [SerializeField] float stepScale = 5;
     [SerializeField] Gradient gradient;
+    [SerializeField] float heightToSpeed = 10; //meters per second?
 
     List<Transform> points = new List<Transform>();
     
@@ -198,29 +199,45 @@ public class GameScene : MonoBehaviour
             }
             
         }
-        
 
 
+
+        float timeToPass = 0;
         for (int i = 0; i < distances.Count; i++)
         {
-        
-            Color color;
-            if (i == 0)
+            float heightDiff = 0;
+            float d = 0;
+            
+            if (i != 0)
             {
-                color = gradient.Evaluate(0);
-            }
-            else
-            {
-                color = gradient.Evaluate(Mathf.Abs(depths[i] - depths[i - 1]) * 100);
+                heightDiff = depths[i]  - depths[i - 1];
+                d = distances[i] - distances[i - 1]; //distance
             }
             
+            
+            Color color = i == 0 ? gradient.Evaluate(0) : gradient.Evaluate(Mathf.Abs(heightDiff) * 100);
+            
             colors.Add(color);
+
+
+            float speed = heightToSpeed * Mathf.Abs(heightDiff);
+            
+            if(Mathf.Approximately(speed, 0))
+                continue;
+            
+            float time = d / speed;
+            timeToPass += time;
         }
+
+        print(timeToPass);
+        
 
 
         line.points = positions;
         line.Colors = colors;
         line.Rebuild();
+        
+        
     }
 
     void OnDestroy()
