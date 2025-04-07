@@ -5,8 +5,9 @@ using UnityEngine;
 public class Polyline : MonoBehaviour
 {
 
-    [SerializeField] float thickness = 0.1f;
+    public float thickness = 0.1f;
     [SerializeField] Material mat;
+    [SerializeField] Material disabledMat;
     
     public List<Vector3> points;
     public List<Color> Colors;
@@ -14,6 +15,11 @@ public class Polyline : MonoBehaviour
     Mesh mesh;
     MeshFilter meshFilter;
     MeshRenderer meshRenderer;
+
+    public void SetDisabledMat()
+    {
+        meshRenderer.material = disabledMat;
+    }
 
     void Awake()
     {
