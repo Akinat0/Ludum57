@@ -27,7 +27,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 391202862857070571}
   m_Father: {fileID: 0}
@@ -74,12 +74,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: -2091883316, guid: 20ce7c2cb4125e049a665ba97bfe838e, type: 3}
   m_Color: {r: 0.61960787, g: 0.6039216, b: 0.6039216, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.3333334, y: 1.3333334}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -101,12 +101,24 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 288926914957491122, guid: 8bfa1209662c7fd4a9275ab948a6217d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 288926914957491122, guid: 8bfa1209662c7fd4a9275ab948a6217d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 288926914957491122, guid: 8bfa1209662c7fd4a9275ab948a6217d, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 288926914957491122, guid: 8bfa1209662c7fd4a9275ab948a6217d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 288926914957491122, guid: 8bfa1209662c7fd4a9275ab948a6217d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.07
+      value: -1.2
       objectReference: {fileID: 0}
     - target: {fileID: 288926914957491122, guid: 8bfa1209662c7fd4a9275ab948a6217d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -139,6 +151,10 @@ PrefabInstance:
     - target: {fileID: 288926914957491122, guid: 8bfa1209662c7fd4a9275ab948a6217d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 288926914957491122, guid: 8bfa1209662c7fd4a9275ab948a6217d, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 288926914957491123, guid: 8bfa1209662c7fd4a9275ab948a6217d, type: 3}
       propertyPath: point
