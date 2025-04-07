@@ -23,6 +23,8 @@ public class GameScene : MonoBehaviour
     [SerializeField] Gradient gradient;
     [SerializeField] float heightToSpeed = 10; //meters per second?
     [SerializeField] Flare flarePrefab;
+    [SerializeField] TextMeshProUGUI predictedTimeText;
+    [SerializeField] TextMeshProUGUI predictedDistText;
 
     List<Transform> points = new List<Transform>();
     
@@ -232,7 +234,9 @@ public class GameScene : MonoBehaviour
             timeToPass += time;
         }
 
-        print(timeToPass);
+        
+        predictedTimeText.text = Mathf.Round(timeToPass) + " min" ;
+        predictedDistText.text = Mathf.Round(dist) + " km";
         
 
 
