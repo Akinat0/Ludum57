@@ -29,7 +29,7 @@ public class Polyline : MonoBehaviour
     {
         if(mesh == null)
             return;
-        
+
         Vector3[] vertices  = new Vector3[points.Count * 2];
         int[]     triangles = new int    [points.Count * 6];
         Color[]   colors    = new Color  [points.Count * 2];
