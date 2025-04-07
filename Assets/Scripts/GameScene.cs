@@ -18,15 +18,18 @@ public class GameScene : MonoBehaviour
     [SerializeField] TextMeshProUGUI heightText;
     [SerializeField] float height = 1000;
     [SerializeField] Transform pointPrefab;
-    [SerializeField] Polyline line;
+    [SerializeField] Polyline linePrefab;
     [SerializeField] float stepScale = 5;
     [SerializeField] Gradient gradient;
     [SerializeField] float heightToSpeed = 10; //meters per second?
     [SerializeField] Flare flarePrefab;
     [SerializeField] TextMeshProUGUI predictedTimeText;
     [SerializeField] TextMeshProUGUI predictedDistText;
+    [SerializeField] float playerMoveSpeed = 10;
+    [SerializeField] Sprite targetPointDisabledSprite;
 
     List<Transform> points = new List<Transform>();
+    Polyline line;
     
     bool endPointConnected => connectedTargetPoint;
     Transform connectedTargetPoint;
@@ -75,25 +78,13 @@ public class GameScene : MonoBehaviour
             Vector3 mouseWorldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             
 
-            if (Input.GetKey(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                /*float speed = 1;
-
-                Vector3 newPos = playerPoint.transform.position + speed * Time.deltaTime * (targetPoint.position - playerPoint.position).normalized;
-
-                float currentHeight = GetTerrainHeightAtLocation(playerPoint.transform.position);
-                float targetHeight = GetTerrainHeightAtLocation(newPos);
-
-                float delta = targetHeight - currentHeight;
-
-                if (!Mathf.Approximately(delta, 0))
+                if (points.Count > 1)
                 {
-                    print(delta);
-                    speed /= 3;
+                    yield return CharacterWalk();
+                    continue;
                 }
-                
-                newPos = playerPoint.transform.position + speed * Time.deltaTime * (targetPoint.position - playerPoint.position).normalized;
-                playerPoint.transform.position = newPos;*/
             }
 
             if (EventSystem.current.IsPointerOverGameObject())
@@ -181,10 +172,53 @@ public class GameScene : MonoBehaviour
     }
 
 
+    IEnumerator CharacterWalk()
+    {
+        for (int i = 1; i < points.Count; i++)
+        {
+            Transform p = points[i];
+            
+            while (p.position != playerPoint.position)
+            {
+                playerPoint.position = Vector3.MoveTowards(playerPoint.position, p.position, playerMoveSpeed * Time.deltaTime);
+                yield return null;
+            }
+        }
+        
+        //add point here
+        if(connectedTargetPoint)
+            connectedTargetPoint = null;
+        
+        StartPath();
+    }
+    
+
     void StartPath()
     {
+        if (line)
+        {
+            line.thickness *= 0.35f;
+            line.Rebuild();
+            line.SetDisabledMat();
+        }
+
+        for (int i = 1; i < points.Count; i++)
+        {
+            if (targetPoints.Contains(points[i]))
+            {
+                points[i].GetComponent<SpriteRenderer>().sprite = targetPointDisabledSprite;
+                points[i].localScale = Vector3.one * 0.2f;
+            }
+            else
+            {
+                points[i].localScale *= 0.35f;
+            }
+        }
+        
+        
         points.Clear();
         points.Add(playerPoint);
+        line = Instantiate(linePrefab, terrain.transform);
     }
     void RefreshLine()
     {
