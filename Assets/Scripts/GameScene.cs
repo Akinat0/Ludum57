@@ -88,15 +88,39 @@ public class GameScene : MonoBehaviour
             Vector3 mouseWorldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (pendingClear)
+            {
+                pendingClear = false;
+
+                foreach (var p in points)
+                {
+                    if (p != playerPoint && !targetPoints.Contains(p))
+                    {
+                        Instantiate(flarePrefab, p.position, Quaternion.identity);
+                        Destroy(p.gameObject);
+                    }
+                }
+                
+                points.Clear();
+                DestroyImmediate(line.gameObject);
+                
+                line = null;
+                pointsRemains += currentPoints;
+                connectedTargetPoint = null;
+                StartPath();
+                continue;
+            }
+            
+            if (Input.GetKeyDown(KeyCode.Space) || pendingWalk)
             {
                 if (points.Count > 1)
                 {
                     yield return CharacterWalk();
+                    pendingWalk = false;
                     continue;
                 }
             }
-
+            
             if (EventSystem.current.IsPointerOverGameObject())
             {
                 heightPivot.gameObject.SetActive(false);
@@ -345,5 +369,17 @@ public class GameScene : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    bool pendingWalk;
+    bool pendingClear;
+    public void StartWalking()
+    {
+        if (points.Count > 0)
+            pendingWalk = true;
+    }
     
+    public void Clear()
+    {
+        pendingClear = true;
+    }
 }

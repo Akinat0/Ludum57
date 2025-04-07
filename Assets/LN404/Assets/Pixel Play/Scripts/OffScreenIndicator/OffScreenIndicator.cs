@@ -125,4 +125,7 @@ public class OffScreenIndicator : MonoBehaviour
     {
         TargetStateChanged -= HandleTargetStateChanged;
     }
+    
+    
+    
 }
