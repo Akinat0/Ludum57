@@ -1,7 +1,11 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
+// ReSharper disable All
 
 public class GameScene : MonoBehaviour
 {
@@ -14,6 +18,10 @@ public class GameScene : MonoBehaviour
     [SerializeField] RectTransform heightPivot;
     [SerializeField] TextMeshProUGUI heightText;
     [SerializeField] float height = 1000;
+    [SerializeField] Transform pointPrefab;
+    [SerializeField] Polyline line;
+
+    List<Transform> points = new List<Transform>();
 
     public static Rect GetSpriteRectInWorld(SpriteRenderer spriteRenderer)
     {
@@ -47,13 +55,12 @@ public class GameScene : MonoBehaviour
 
     IEnumerator Start()
     {
+        
         while (true)
         {
             Vector3 mouseWorldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             
-            if (Input.GetMouseButtonDown(0))
-            {
-            }
+            
 
             if (Input.GetKey(KeyCode.Space))
             {
@@ -85,11 +92,94 @@ public class GameScene : MonoBehaviour
                 heightPivot.position = Input.mousePosition + new Vector3(heightPivot.rect.width / 1.3f, -heightPivot.rect.height / 1.3f);
                 heightPivot.gameObject.SetActive(true);
                 heightText.text = Mathf.RoundToInt(GetTerrainHeightAtLocation(mouseWorldPoint) * height) + "m";
+                
+                
+                if (Input.GetMouseButtonDown(0))
+                {
+                    Vector2 clickPoint = new Vector2(mouseWorldPoint.x, mouseWorldPoint.y);
+                    
+                    
+                    bool pointDeleted = false;
+                    
+                    for (int i = 0; i < points.Count; i++)
+                    {
+                        Transform p = points[i];
+                        
+                        if (Vector2.Distance(clickPoint, new Vector2(p.transform.position.x, p.transform.position.y)) < 1)
+                        {
+                            Destroy(p.gameObject);
+                            points.RemoveAt(i);
+                            pointDeleted = true;
+                            
+                            break;
+                        }
+                    }
+
+                    if (!pointDeleted)
+                    {
+                        Vector3 pos = mouseWorldPoint;
+                        pos.z = terrain.transform.position.z - 1;
+                        var point = Instantiate(pointPrefab, pos, Quaternion.identity);
+                        point.parent = terrain.transform;
+                    
+                        points.Add(point);
+                    }
+                    
+                    
+                    RefreshLine();
+                }
             }
             
             
             yield return null;
         }
+    }
+
+
+    void RefreshLine()
+    {
+        // line.positionCount = points.Count;
+
+        List<Vector3> positions = new List<Vector3>();
+        List<float>   distances = new List<float>();
+        List<float>   depths    = new List<float>();
+        List<Color>   colors    = new List<Color>();
+
+
+        float dist = 0;
+        for (int i = 0; i < points.Count - 1; i++)
+        {
+            Vector3 targetPosition  = points[i + 1].transform.position;
+            Vector3 currentPosition = points[i].transform.position;
+
+            Vector3 direction = (targetPosition - currentPosition).normalized;
+        
+            while (targetPosition != currentPosition)
+            {
+                Vector3 nextPos = Vector3.MoveTowards(currentPosition, targetPosition, 1);
+                dist += (nextPos - currentPosition).magnitude;
+                
+                positions.Add(currentPosition);
+                distances.Add(dist);
+                depths.Add(GetTerrainHeightAtLocation(currentPosition));
+                
+                currentPosition = nextPos;
+            }
+            
+        }
+        
+
+
+        for (int i = 0; i < distances.Count; i++)
+        {
+            Color color = Color.Lerp(Color.red, Color.green, depths[i]);
+            colors.Add(color);
+        }
+
+
+        line.points = positions;
+        line.Colors = colors;
+        line.Rebuild();
     }
 
     void OnDestroy()
