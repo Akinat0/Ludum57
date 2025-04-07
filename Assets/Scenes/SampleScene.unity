@@ -478,7 +478,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1825492967, guid: a7c487f216758e048aa4e2f751121d31, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1825492967, guid: a7c487f216758e048aa4e2f751121d31, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.3757829
+      objectReference: {fileID: 0}
+    - target: {fileID: 1825492967, guid: a7c487f216758e048aa4e2f751121d31, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.3757829
       objectReference: {fileID: 0}
     - target: {fileID: 423722468697252568, guid: a7c487f216758e048aa4e2f751121d31, type: 3}
       propertyPath: m_RaycastTarget
