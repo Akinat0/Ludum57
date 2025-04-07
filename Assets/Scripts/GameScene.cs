@@ -31,6 +31,8 @@ public class GameScene : MonoBehaviour
     [SerializeField] TextMeshProUGUI pointCurrText;
     [SerializeField] float playerMoveSpeed = 10;
     [SerializeField] Sprite targetPointDisabledSprite;
+    [SerializeField] GameObject failScreen;
+    [SerializeField] GameObject uiToDisable;
 
     public int pointsRemains = 10;
     public int currentPoints = 0;
@@ -40,6 +42,7 @@ public class GameScene : MonoBehaviour
     
     bool endPointConnected => connectedTargetPoint;
     Transform connectedTargetPoint;
+
 
     public static Rect GetSpriteRectInWorld(SpriteRenderer spriteRenderer)
     {
@@ -328,7 +331,14 @@ public class GameScene : MonoBehaviour
     
     void Failed()
     {
-        Restart();
+        failScreen.SetActive(true);
+    }
+
+    public void SetUIVisibility()
+    {
+        if (uiToDisable.activeSelf)
+            uiToDisable.SetActive(false);
+        else uiToDisable.SetActive(true);
     }
 
     public void Restart()
