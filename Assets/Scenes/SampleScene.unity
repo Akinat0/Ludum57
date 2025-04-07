@@ -660,6 +660,7 @@ MonoBehaviour:
   predictedTimeText: {fileID: 1459469187}
   predictedDistText: {fileID: 1300483601}
   playerMoveSpeed: 5
+  targetPointDisabledSprite: {fileID: -1764445172, guid: 20ce7c2cb4125e049a665ba97bfe838e, type: 3}
 --- !u!4 &791063428
 Transform:
   m_ObjectHideFlags: 0

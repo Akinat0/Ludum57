@@ -26,6 +26,7 @@ public class GameScene : MonoBehaviour
     [SerializeField] TextMeshProUGUI predictedTimeText;
     [SerializeField] TextMeshProUGUI predictedDistText;
     [SerializeField] float playerMoveSpeed = 10;
+    [SerializeField] Sprite targetPointDisabledSprite;
 
     List<Transform> points = new List<Transform>();
     Polyline line;
@@ -201,6 +202,20 @@ public class GameScene : MonoBehaviour
             line.SetDisabledMat();
         }
 
+        for (int i = 1; i < points.Count; i++)
+        {
+            if (targetPoints.Contains(points[i]))
+            {
+                points[i].GetComponent<SpriteRenderer>().sprite = targetPointDisabledSprite;
+                points[i].localScale = Vector3.one * 0.2f;
+            }
+            else
+            {
+                points[i].localScale *= 0.35f;
+            }
+        }
+        
+        
         points.Clear();
         points.Add(playerPoint);
         line = Instantiate(linePrefab, terrain.transform);
