@@ -29,6 +29,8 @@ public class GameScene : MonoBehaviour
     [SerializeField] TextMeshProUGUI predictedElevationText;
     [SerializeField] TextMeshProUGUI pointRemainsText;
     [SerializeField] TextMeshProUGUI pointCurrText;
+    [SerializeField] TextMeshProUGUI totalDistText;
+    [SerializeField] TextMeshProUGUI totalTimeText;
     [SerializeField] float playerMoveSpeed = 10;
     [SerializeField] Sprite targetPointDisabledSprite;
     [SerializeField] GameObject failScreen;
@@ -36,7 +38,12 @@ public class GameScene : MonoBehaviour
 
     public int pointsRemains = 10;
     public int currentPoints = 0;
+    public float totalMinutes = 0;
+    public float totalDistance = 0;
+    float predictedDistance;
+    float predictedTime;
 
+    HashSet<Transform> visitedPoints = new HashSet<Transform>();
     List<Transform> points = new List<Transform>();
     Polyline line;
     
@@ -79,8 +86,20 @@ public class GameScene : MonoBehaviour
         Instance = this;
     }
 
+
+    void UpdateTotalTime()
+    {
+        int hours = Mathf.RoundToInt(totalMinutes) / 60 + 6;
+        int minutes = Mathf.RoundToInt(totalMinutes) % 60;
+
+        totalTimeText.text = hours + ":" + minutes;
+    }
+
     IEnumerator Start()
     {
+        totalDistText.text = 0 + " km";
+        UpdateTotalTime();
+
         StartPath();
         
         while (true)
@@ -115,6 +134,7 @@ public class GameScene : MonoBehaviour
             {
                 if (points.Count > 1)
                 {
+                    StartCoroutine(TimeDistanceRoutine());
                     yield return CharacterWalk();
                     pendingWalk = false;
                     continue;
@@ -229,14 +249,44 @@ public class GameScene : MonoBehaviour
             }
         }
         
-        //TODO add point success here
-        if(connectedTargetPoint)
+        if (connectedTargetPoint)
+        {
+            visitedPoints.Add(connectedTargetPoint);
             connectedTargetPoint = null;
+
+            if (visitedPoints.Count == targetPoints.Count)
+            {
+                //TODO WINWINWIWNWIWNWIWNWIWWNNWNW
+                Restart();
+            }
+        }
         
         
         StartPath();
     }
-    
+
+    IEnumerator TimeDistanceRoutine()
+    {
+        float duration = predictedDistance / playerMoveSpeed;
+        float t = 0;
+        float prevDist = totalDistance;
+        float prevTime = totalMinutes;
+        
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            totalDistance = Mathf.Lerp(prevDist, prevDist + predictedDistance, t / duration);
+            totalMinutes = Mathf.Lerp(prevTime, prevTime + predictedTime, t / duration);
+            UpdateTotalTime();
+            totalDistText.text = Mathf.RoundToInt(totalDistance) + " km";
+            yield return null;
+        }
+        
+        totalMinutes = prevTime + predictedTime;
+        totalDistance = prevDist + predictedDistance;
+        totalDistText.text = Mathf.RoundToInt(totalDistance) + " km";
+        UpdateTotalTime();
+    }
 
     void StartPath()
     {
@@ -245,7 +295,10 @@ public class GameScene : MonoBehaviour
         
         currentPoints = 0;
         pointCurrText.text = currentPoints.ToString();
-        
+        pointRemainsText.text = pointsRemains.ToString();
+        predictedElevationText.text = 0.ToString() + "m";
+        predictedDistText.text = 0 + " km";
+        predictedTimeText.text = 0 + " min";
         if (line)
         {
             line.thickness *= 0.5f;
@@ -337,6 +390,8 @@ public class GameScene : MonoBehaviour
         
         predictedTimeText.text = Mathf.Round(timeToPass) + " min" ;
         predictedDistText.text = Mathf.Round(dist) + " km";
+        predictedDistance = dist;
+        predictedTime = timeToPass;
         predictedElevationText.text = Mathf.Round(totalPredictedHeight) + "m";
         
 
