@@ -92,7 +92,7 @@ public class GameScene : MonoBehaviour
         int hours = Mathf.RoundToInt(totalMinutes) / 60 + 6;
         int minutes = Mathf.RoundToInt(totalMinutes) % 60;
 
-        totalTimeText.text = hours + ":" + minutes;
+        totalTimeText.text = string.Format("{0:D2}:{1:D2}", hours, minutes);
     }
 
     IEnumerator Start()
