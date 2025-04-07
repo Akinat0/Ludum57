@@ -80,7 +80,7 @@ Material:
     - _Curvature: 20
     - _Curvature2: 0
     - _Cutoff: 0.5
-    - _Desaturation: 0.723
+    - _Desaturation: 0.07
     - _DetailNormalMapScale: 1
     - _DitherScreenScale: 1.65
     - _DstBlend: 0
@@ -88,7 +88,7 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _HorzFuzzOpt: 0.1
-    - _MaxColorsBlue: 193
+    - _MaxColorsBlue: 202
     - _MaxColorsGreen: 206
     - _MaxColorsRed: 210
     - _Metallic: 0
@@ -99,8 +99,8 @@ Material:
     - _ScanlinesOpt: 0.4
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _Spread: 0.086
-    - _Spread8: 0.14
+    - _Spread: 0.01
+    - _Spread8: 0.1
     - _SrcBlend: 1
     - _UVSec: 0
     - _VertJerkOpt: 1
@@ -110,6 +110,6 @@ Material:
     m_Colors:
     - _BorderTint: {r: 0, g: 0, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _ColorScans: {r: 0.35, g: 0.35, b: 4.77, a: 0}
+    - _ColorScans: {r: 0.35, g: 0.35, b: 5, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

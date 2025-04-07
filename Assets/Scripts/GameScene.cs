@@ -1,15 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
-// ReSharper disable All
+
 
 public class GameScene : MonoBehaviour
 {
-    static GameScene Instance { get; set; }
+    public static GameScene Instance { get; set; }
 
     [SerializeField] SpriteRenderer terrain;
     [SerializeField] Texture2D terrainTexture;
@@ -20,8 +19,12 @@ public class GameScene : MonoBehaviour
     [SerializeField] float height = 1000;
     [SerializeField] Transform pointPrefab;
     [SerializeField] Polyline line;
+    [SerializeField] float stepScale = 5;
+    [SerializeField] Gradient gradient;
 
     List<Transform> points = new List<Transform>();
+    
+    bool endPointConnected = false;
 
     public static Rect GetSpriteRectInWorld(SpriteRenderer spriteRenderer)
     {
@@ -42,7 +45,7 @@ public class GameScene : MonoBehaviour
     }
 
 
-    float GetTerrainHeightAtLocation(Vector3 worldPoint)
+    public float GetTerrainHeightAtLocation(Vector3 worldPoint)
     {
         Rect rect = GetSpriteRectInWorld(terrain);
 
@@ -53,13 +56,18 @@ public class GameScene : MonoBehaviour
 
     }
 
+    void Awake()
+    {
+        Instance = this;
+    }
+
     IEnumerator Start()
     {
+        StartPath();
         
         while (true)
         {
             Vector3 mouseWorldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            
             
 
             if (Input.GetKey(KeyCode.Space))
@@ -89,7 +97,7 @@ public class GameScene : MonoBehaviour
             }
             else
             {
-                heightPivot.position = Input.mousePosition + new Vector3(heightPivot.rect.width / 1.3f, -heightPivot.rect.height / 1.3f);
+                heightPivot.position = Camera.main.ScreenToWorldPoint(Input.mousePosition) + Vector3.forward * 5 + Vector3.down;// + new Vector3(heightPivot.rect.width / 1.3f, -heightPivot.rect.height / 1.3f));
                 heightPivot.gameObject.SetActive(true);
                 heightText.text = Mathf.RoundToInt(GetTerrainHeightAtLocation(mouseWorldPoint) * height) + "m";
                 
@@ -100,22 +108,40 @@ public class GameScene : MonoBehaviour
                     
                     
                     bool pointDeleted = false;
-                    
-                    for (int i = 0; i < points.Count; i++)
+
+                    //    ADD/REMOVE TARGET POINT        
+                    if (Vector2.Distance(clickPoint, new Vector2(targetPoint.transform.position.x, targetPoint.transform.position.y)) < targetPoint.localScale.x)
                     {
-                        Transform p = points[i];
+                        if (endPointConnected)
+                            points.Remove(targetPoint);
+                        else
+                            points.Add(targetPoint);
                         
-                        if (Vector2.Distance(clickPoint, new Vector2(p.transform.position.x, p.transform.position.y)) < 1)
+                        endPointConnected = !endPointConnected;
+                        pointDeleted = true;
+                    }
+                    //    REMOVE WAYPOINT
+                    else 
+                    {
+                        for (int i = 1 /* don't touch player*/ ; i < points.Count; i++)
                         {
-                            Destroy(p.gameObject);
-                            points.RemoveAt(i);
-                            pointDeleted = true;
+                            Transform p = points[i];
                             
-                            break;
+
+                            if (Vector2.Distance(clickPoint,
+                                    new Vector2(p.transform.position.x, p.transform.position.y)) < p.localScale.x)
+                            {
+                                Destroy(p.gameObject);
+                                points.RemoveAt(i);
+                                pointDeleted = true;
+
+                                break;
+                            }
                         }
                     }
 
-                    if (!pointDeleted)
+                    //    ADD WAYPOINT
+                    if (!pointDeleted && !endPointConnected)
                     {
                         Vector3 pos = mouseWorldPoint;
                         pos.z = terrain.transform.position.z - 1;
@@ -136,6 +162,11 @@ public class GameScene : MonoBehaviour
     }
 
 
+    void StartPath()
+    {
+        points.Clear();
+        points.Add(playerPoint);
+    }
     void RefreshLine()
     {
         // line.positionCount = points.Count;
@@ -147,16 +178,16 @@ public class GameScene : MonoBehaviour
 
 
         float dist = 0;
+
         for (int i = 0; i < points.Count - 1; i++)
         {
             Vector3 targetPosition  = points[i + 1].transform.position;
             Vector3 currentPosition = points[i].transform.position;
 
-            Vector3 direction = (targetPosition - currentPosition).normalized;
         
             while (targetPosition != currentPosition)
             {
-                Vector3 nextPos = Vector3.MoveTowards(currentPosition, targetPosition, 1);
+                Vector3 nextPos = Vector3.MoveTowards(currentPosition, targetPosition, (float)stepScale / terrain.sprite.pixelsPerUnit);
                 dist += (nextPos - currentPosition).magnitude;
                 
                 positions.Add(currentPosition);
@@ -172,7 +203,17 @@ public class GameScene : MonoBehaviour
 
         for (int i = 0; i < distances.Count; i++)
         {
-            Color color = Color.Lerp(Color.red, Color.green, depths[i]);
+        
+            Color color;
+            if (i == 0)
+            {
+                color = gradient.Evaluate(0);
+            }
+            else
+            {
+                color = gradient.Evaluate(Mathf.Abs(depths[i] - depths[i - 1]) * 100);
+            }
+            
             colors.Add(color);
         }
 

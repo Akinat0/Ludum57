@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: RetroBlue
   m_EditorClassIdentifier: 
   data:
-    pixelationAmount: 2
+    pixelationAmount: 1
     maxColorChannels:
       red: 210
       green: 206
       blue: 202
-      greyScale: 0.637
-    dithering4: 0.1
-    dithering8: 0.2
+      greyScale: 0.07
+    dithering4: 0.01
+    dithering8: 0.1
     vignette: 0.026
     innerCurve: 20
     monitorCurve: 0
@@ -30,7 +30,7 @@ MonoBehaviour:
     monitorOutterSize:
       width: 0
       height: 0
-    zoom: 1.1
+    zoom: 1.2
     monitorRoundness: 0.2
     monitorTexture: {fileID: 0}
     monitorColor: {r: 0, g: 0, b: 0, a: 1}
@@ -42,4 +42,4 @@ MonoBehaviour:
       sizeMultiplier: 5
     innerMonitorShineRadius: -0.087
     innerMonitorShineCurve: 10
-  validationId: c74f7509-f853-4e4b-bc09-0b8fa8560782
+  validationId: 72743253-8319-4e5d-8f4a-7e6bd4066e11

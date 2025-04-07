@@ -23,8 +23,6 @@ public class Polyline : MonoBehaviour
 
         meshRenderer = gameObject.AddComponent<MeshRenderer>();
         meshRenderer.material = mat;
-
-        // Rebuild();
     }
     
     public void Rebuild()
@@ -44,7 +42,7 @@ public class Polyline : MonoBehaviour
             Vector3 pos = points[i];
             pos = transform.InverseTransformPoint(pos);
 
-            Vector3 dir = (i == (points.Count() - 1)) ? Vector3.zero : (points[i + 1] - points[i]).normalized;
+            Vector3 dir = (i == (points.Count() - 1)) ? (points[i] - points[i - 1]).normalized : (points[i + 1] - points[i]).normalized;
 
             Vector3 tangent = dir; //new Vector3(dir.y, -dir.x);
             Vector3 upVector = new Vector3(0, 0, -1);
@@ -72,17 +70,6 @@ public class Polyline : MonoBehaviour
                 triangles[i * 6 + 4] = i * 2 + 3;
                 triangles[i * 6 + 5] = i * 2 + 2;
             }
-            // else
-            // {
-            //     
-            //     triangles[i * 6 + 0] = i * 2 + 0;
-            //     triangles[i * 6 + 1] = i * 2 + 1;
-            //     triangles[i * 6 + 2] = 0;
-            //
-            //     triangles[i * 6 + 3] = i * 2 + 1;
-            //     triangles[i * 6 + 4] = 1;
-            //     triangles[i * 6 + 5] = 0;
-            // }
         
 
             Debug.DrawLine(pos, pos + upVector * 3, Color.blue, 5, false);
