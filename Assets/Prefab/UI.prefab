@@ -1088,28 +1088,28 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Travel through mountains, navigating heights and depths. Visit all locations
     within a limited time and points. Choose your path and aim to finish faster with
-    fewer points.
+    fewer points. You need to visit all locations before 00:00.
 
 
     How to Play:
 
 
-    LMB to place a point.
+    LMB
+    to place a point.
 
-    LMB on a point
-    to remove it.
+    LMB on a point to remove it.
 
-    Press "Start" to begin moving.
+    Press "Start" to begin
+    moving.
 
-    Press "Clear" to remove
-    all points.
+    Press "Clear" to remove all points.
 
-    Press "Restart" to start over.
+    Press "Restart" to start
+    over.
 
     Press "Help" for assistance.
 
-    Press
-    "Hide UI" to hide the interface.'
+    Press "Hide UI" to hide the interface.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 590127691203e7f4cbc9114d14b89097, type: 2}
   m_sharedMaterial: {fileID: -2811120940542276443, guid: 590127691203e7f4cbc9114d14b89097, type: 2}
