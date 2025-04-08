@@ -1403,6 +1403,9 @@ MonoBehaviour:
   winScreen: {fileID: 1612038619}
   uiToDisable: {fileID: 1184925622}
   howToPlay: {fileID: 200744110}
+  start: {fileID: 8300000, guid: fb2f052bca155e24888048b2b5eb9b3d, type: 3}
+  place: {fileID: 8300000, guid: adb35dfa9ce10c14ebd134580e734f2a, type: 3}
+  remove: {fileID: 8300000, guid: 7e012d857a54c504c8cf316576774cb9, type: 3}
   pointsRemains: 45
   currentPoints: 10
   totalMinutes: 0

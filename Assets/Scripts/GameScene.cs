@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -39,6 +38,10 @@ public class GameScene : MonoBehaviour
     [SerializeField] GameObject winScreen;
     [SerializeField] GameObject uiToDisable;
     [SerializeField] GameObject howToPlay;
+    [SerializeField] AudioClip start;
+    [SerializeField] AudioClip place;
+    [SerializeField] AudioClip remove;
+    
 
     public int pointsRemains = 10;
     public int currentPoints = 0;
@@ -87,9 +90,13 @@ public class GameScene : MonoBehaviour
 
     }
 
+    AudioSource audioSource;
+
     void Awake()
     {
         Instance = this;
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.volume = 0.35f;
     }
 
 
@@ -130,6 +137,7 @@ public class GameScene : MonoBehaviour
                 {
                     if (p != playerPoint && !targetPoints.Contains(p))
                     {
+                        audioSource.PlayOneShot(remove);
                         Instantiate(flarePrefab, p.position, Quaternion.identity);
                         Destroy(p.gameObject);
                     }
@@ -149,6 +157,7 @@ public class GameScene : MonoBehaviour
             {
                 if (points.Count > 1)
                 {
+                    audioSource.PlayOneShot(start);
                     StartCoroutine(TimeDistanceRoutine());
                     yield return CharacterWalk();
                     pendingWalk = false;
@@ -191,6 +200,7 @@ public class GameScene : MonoBehaviour
                             {
                                 if (!connectedTargetPoint && pointsRemains > 0)
                                 {
+                                    audioSource.PlayOneShot(place);
                                     points.Add(targetPoint);
                                     connectedTargetPoint = targetPoint;
                                     Instantiate(flarePrefab, targetPoint.transform.position, Quaternion.identity);
@@ -199,6 +209,7 @@ public class GameScene : MonoBehaviour
                                 }
                                 else if (targetPoint == connectedTargetPoint)
                                 {
+                                    audioSource.PlayOneShot(remove);
                                     points.Remove(targetPoint);
                                     connectedTargetPoint = null;
                                     Instantiate(flarePrefab, targetPoint.transform.position, Quaternion.identity);
@@ -229,6 +240,7 @@ public class GameScene : MonoBehaviour
                                 pointsRemains++;
                                 currentPoints--;
                                 pointDeleted = true;
+                                audioSource.PlayOneShot(remove);
 
                                 break;
                             }
@@ -245,6 +257,7 @@ public class GameScene : MonoBehaviour
                         point.parent = terrain.transform;
                         pointsRemains--;
                         currentPoints++;
+                        audioSource.PlayOneShot(place);
                     
                         points.Add(point);
                     }
@@ -286,6 +299,7 @@ public class GameScene : MonoBehaviour
             }
         }
         
+        audioSource.PlayOneShot(start);
         
         StartPath();
     }
