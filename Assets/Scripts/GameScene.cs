@@ -407,14 +407,16 @@ public class GameScene : MonoBehaviour
                 heightDiff = depths[i]  - depths[i - 1];
                 d = distances[i] - distances[i - 1]; //distance
             }
-            
-            
-            Color color = i == 0 ? gradient.Evaluate(0) : gradient.Evaluate(Mathf.Abs(heightDiff) * 100);
+
+            float scale = heightDiff > 0 ? 1 : 0.5f;
+
+
+            Color color = i == 0 ? gradient.Evaluate(0) : gradient.Evaluate(Mathf.Abs(heightDiff) * scale * 100);
             
             colors.Add(color);
 
 
-            float speed = heightToSpeed * Mathf.Abs(heightDiff);
+            float speed = heightToSpeed * Mathf.Abs(heightDiff * scale);
             
             if(Mathf.Approximately(speed, 0))
                 continue;
