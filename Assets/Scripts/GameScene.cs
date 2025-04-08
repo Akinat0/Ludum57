@@ -38,6 +38,7 @@ public class GameScene : MonoBehaviour
     [SerializeField] GameObject failScreen;
     [SerializeField] GameObject winScreen;
     [SerializeField] GameObject uiToDisable;
+    [SerializeField] GameObject howToPlay;
 
     public int pointsRemains = 10;
     public int currentPoints = 0;
@@ -456,6 +457,13 @@ public class GameScene : MonoBehaviour
         if (uiToDisable.activeSelf)
             uiToDisable.SetActive(false);
         else uiToDisable.SetActive(true);
+    }
+
+    public void SetHowToPlayVisibility()
+    {
+        if (howToPlay.activeSelf)
+            howToPlay.SetActive(false);
+        else howToPlay.SetActive(true);
     }
 
     public void Restart()
