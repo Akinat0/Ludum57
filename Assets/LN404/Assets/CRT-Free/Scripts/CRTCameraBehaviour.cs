@@ -64,13 +64,13 @@ namespace BrewedInk.CRT
 		[ContextMenu("Reset Material")]
 		public void ResetMaterial()
 		{
-			DestroyMaterial();
-			CreateMaterial();
+			//DestroyMaterial();
+			//CreateMaterial();
 		}
 	
 		private void OnDestroy()
 		{
-			DestroyMaterial();
+			//DestroyMaterial();
 		}
 
 		void DestroyMaterial()
