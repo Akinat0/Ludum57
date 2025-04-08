@@ -34,6 +34,7 @@ public class GameScene : MonoBehaviour
     [SerializeField] TextMeshProUGUI totalHeightText;
     [SerializeField] float playerMoveSpeed = 10;
     [SerializeField] Sprite targetPointDisabledSprite;
+    [SerializeField] Sprite targetPointEnabledSprite;
     [SerializeField] GameObject failScreen;
     [SerializeField] GameObject winScreen;
     [SerializeField] GameObject uiToDisable;
@@ -148,7 +149,13 @@ public class GameScene : MonoBehaviour
                 
                 line = null;
                 pointsRemains += currentPoints;
+
+                if (connectedTargetPoint != null && !visitedPoints.Contains(connectedTargetPoint))
+                    connectedTargetPoint.GetComponent<SpriteRenderer>().sprite = targetPointEnabledSprite;
+                
                 connectedTargetPoint = null;
+                
+                
                 StartPath();
                 continue;
             }
@@ -203,6 +210,8 @@ public class GameScene : MonoBehaviour
                                     audioSource.PlayOneShot(place);
                                     points.Add(targetPoint);
                                     connectedTargetPoint = targetPoint;
+                                    
+                                    connectedTargetPoint.GetComponent<SpriteRenderer>().sprite = targetPointDisabledSprite;
                                     Instantiate(flarePrefab, targetPoint.transform.position, Quaternion.identity);
                                     pointsRemains--;
                                     currentPoints++;
@@ -211,6 +220,8 @@ public class GameScene : MonoBehaviour
                                 {
                                     audioSource.PlayOneShot(remove);
                                     points.Remove(targetPoint);
+                                    if (connectedTargetPoint != null && !visitedPoints.Contains(connectedTargetPoint))
+                                        connectedTargetPoint.GetComponent<SpriteRenderer>().sprite = targetPointEnabledSprite;
                                     connectedTargetPoint = null;
                                     Instantiate(flarePrefab, targetPoint.transform.position, Quaternion.identity);
                                     pointsRemains++;
